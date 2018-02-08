@@ -21,6 +21,8 @@ import com.uber.cadence.client.CadenceClient;
 import com.uber.cadence.client.WorkflowExternalResult;
 import com.uber.cadence.internal.StartWorkflowOptions;
 
+import java.util.List;
+
 public class WorkflowExecutionStarter {
 
     public static void main(String[] args) throws Exception {
@@ -42,6 +44,8 @@ public class WorkflowExecutionStarter {
         WorkflowExecution workflowExecution = result.getExecution();
         System.out.println("Started helloWorld workflow with workflowId=\"" + workflowExecution.getWorkflowId()
                 + "\" and runId=\"" + workflowExecution.getRunId() + "\"");
+
+        List<String> progress = workflow.getProgress();
     }
 
 }

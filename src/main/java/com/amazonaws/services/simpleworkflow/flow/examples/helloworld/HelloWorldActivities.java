@@ -19,7 +19,9 @@ package com.amazonaws.services.simpleworkflow.flow.examples.helloworld;
  */
 public interface HelloWorldActivities {
 
-    String printHello(String name);
+    String printHello(String greeting, String name);
+
+    String getGreeting();
 
     String getName();
     

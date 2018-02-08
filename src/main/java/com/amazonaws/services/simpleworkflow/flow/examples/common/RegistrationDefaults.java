@@ -14,7 +14,7 @@
  */
 package com.amazonaws.services.simpleworkflow.flow.examples.common;
 
-import com.amazonaws.services.simpleworkflow.flow.common.FlowConstants;
+import com.uber.cadence.internal.common.FlowConstants;
 
 public final class RegistrationDefaults {
 	private static final long SECONDS_IN_MINUTE = 60;

@@ -18,12 +18,16 @@ package com.amazonaws.services.simpleworkflow.flow.examples.helloworld;
 import com.uber.cadence.workflow.ActivitySchedulingOptions;
 import com.uber.cadence.workflow.Workflow;
 
+import java.util.List;
+
 /**
  * Implementation of the hello world workflow
  */
 public class HelloWorldWorkflowImpl implements HelloWorldWorkflow {
 
     private HelloWorldActivities client;
+
+    private List<String> progress;
 
     public HelloWorldWorkflowImpl() {
         ActivitySchedulingOptions options = new ActivitySchedulingOptions();
@@ -32,13 +36,23 @@ public class HelloWorldWorkflowImpl implements HelloWorldWorkflow {
         options.setStartToCloseTimeoutSeconds(20);
         options.setHeartbeatTimeoutSeconds(10);
         options.setTaskList(ActivityHost.ACTIVITIES_TASK_LIST);
+
         client = Workflow.newActivityClient(HelloWorldActivities.class, options);
     }
 
     @Override
-    public String helloWorld(String aaa) {
+    public String helloWorld(String dls) {
+        progress.add("initial");
         String name = client.getName();
-        return client.printHello(name);
+        progress.add("got name");
+        String greeting = client.getGreeting();
+        progress.add("got greeting");
+        return client.printHello(greeting, name);
+    }
+
+    @Override
+    public List<String> getProgress() {
+        return progress;
     }
 
 }

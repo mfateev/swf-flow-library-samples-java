@@ -14,7 +14,11 @@
  */
 package com.amazonaws.services.simpleworkflow.flow.examples.helloworld;
 
+import com.uber.cadence.workflow.QueryMethod;
+import com.uber.cadence.workflow.SignalMethod;
 import com.uber.cadence.workflow.WorkflowMethod;
+
+import java.util.List;
 
 /**
  * Contract of the hello world workflow
@@ -24,4 +28,6 @@ public interface HelloWorldWorkflow {
     @WorkflowMethod
     String helloWorld(String name);
 
+    @QueryMethod
+    List<String> getProgress();
 }

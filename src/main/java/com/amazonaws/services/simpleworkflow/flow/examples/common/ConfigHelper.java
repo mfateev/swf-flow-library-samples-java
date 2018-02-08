@@ -14,24 +14,23 @@
  */
 package com.amazonaws.services.simpleworkflow.flow.examples.common;
 
+import com.uber.cadence.WorkflowService;
+import com.uber.cadence.serviceclient.WorkflowServiceTChannel;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
-
-import com.amazonaws.services.simpleworkflow.flow.worker.DecisionTaskPoller;
-import com.uber.cadence.serviceclient.WorkflowServiceTChannel;
-import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import java.util.concurrent.TimeUnit;
 
 //import com.amazonaws.auth.AWSCredentials;
 //import com.amazonaws.auth.BasicAWSCredentials;
 //import com.amazonaws.services.s3.AmazonS3;
 //import com.amazonaws.services.s3.AmazonS3Client;
-import com.uber.cadence.WorkflowService;
 
 
 /**
@@ -130,6 +129,7 @@ public class ConfigHelper {
 
     public WorkflowService.Iface createWorkflowClient() {
         WorkflowServiceTChannel.ClientOptions.Builder optionsBuilder = new WorkflowServiceTChannel.ClientOptions.Builder();
+        optionsBuilder.setRpcTimeout(TimeUnit.SECONDS.toMillis(65)); // Should be above 1 minute long poll
         return new WorkflowServiceTChannel(host, port, serviceName, optionsBuilder.build());
     }
 

@@ -14,18 +14,19 @@
  */
 package com.amazonaws.services.simpleworkflow.flow.examples.booking;
 
+import com.amazonaws.services.simpleworkflow.flow.examples.common.ConfigHelper;
+import com.uber.cadence.WorkflowService;
+import com.uber.cadence.worker.Worker;
+import com.uber.cadence.worker.WorkerOptions;
+
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-
-import com.uber.cadence.WorkflowService;
-import com.amazonaws.services.simpleworkflow.flow.WorkflowWorker;
-import com.amazonaws.services.simpleworkflow.flow.examples.common.ConfigHelper;
 
 public class WorkflowHost {
     private static WorkflowService.Iface swfService;
     private static String domain;
     private static int domainRetentionPeriodInDays;
-    private static WorkflowWorker worker;
+    private static Worker worker;
     private static WorkflowHost host;
 
     // Factory method for Workflow Host
@@ -59,10 +60,10 @@ public class WorkflowHost {
         System.out.println("Starting Workflow Host Service...");
 
         String taskList = configHelper.getValueFromConfig(BookingConfigKeys.WORKFLOW_WORKER_TASKLIST);
-        worker = new WorkflowWorker(swfService, domain, taskList);
-        worker.setDomainRetentionPeriodInDays(domainRetentionPeriodInDays);
-        worker.setRegisterDomain(true);
-        worker.addWorkflowImplementationType(BookingWorkflowImpl.class);
+        WorkerOptions workerOptions = new WorkerOptions();
+        workerOptions.setDisableActivityWorker(true);
+        worker = new Worker(swfService, domain, taskList, workerOptions);
+        worker.addWorkflowType(BookingWorkflowImpl.class);
         // Start the worker threads
         worker.start();
 
@@ -71,8 +72,7 @@ public class WorkflowHost {
 
     private void stopHost() throws InterruptedException {
         System.out.println("Stopping Workflow Host Service...");
-        worker.shutdownNow();
-        worker.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
+        worker.shutdown(Long.MAX_VALUE, TimeUnit.DAYS);
         System.out.println("Workflow Host Service Stopped...");
     }
     

@@ -14,11 +14,6 @@
  */
 package com.amazonaws.services.simpleworkflow.flow.examples.common;
 
-import com.uber.cadence.WorkflowService;
-import com.amazonaws.services.simpleworkflow.flow.WorkflowException;
-import com.amazonaws.services.simpleworkflow.flow.WorkflowReplayer;
-import com.uber.cadence.WorkflowExecution;
-
 /**
  * Simple example utility to pretty print workflow execution history.
  * 
